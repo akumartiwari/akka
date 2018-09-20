@@ -17,9 +17,9 @@ import akka.actor.typed.Behavior
 import akka.actor.typed.Extension
 import akka.actor.typed.ExtensionId
 import akka.actor.typed.ExtensionSetup
-import akka.actor.typed.MessageChannel
+import akka.actor.typed.RecipientRef
 import akka.actor.typed.Props
-import akka.actor.typed.internal.InternalMessageChannel
+import akka.actor.typed.internal.InternalRecipientRef
 import akka.annotation.DoNotInherit
 import akka.annotation.InternalApi
 import akka.cluster.sharding.ShardCoordinator.ShardAllocationStrategy
@@ -253,7 +253,7 @@ object EntityTypeKey {
  * [[ActorRef]] and watch it in case such notification is desired.
  * Not for user extension.
  */
-@DoNotInherit trait EntityRef[A] extends MessageChannel[A] { this: InternalMessageChannel[A] ⇒
+@DoNotInherit trait EntityRef[A] extends RecipientRef[A] { this: InternalRecipientRef[A] ⇒
 
   /**
    * Send a message to the entity referenced by this EntityRef using *at-most-once*

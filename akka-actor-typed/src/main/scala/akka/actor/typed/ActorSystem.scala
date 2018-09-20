@@ -16,7 +16,7 @@ import akka.util.Timeout
 import akka.annotation.DoNotInherit
 import akka.annotation.ApiMayChange
 import akka.actor.BootstrapSetup
-import akka.actor.typed.internal.InternalMessageChannel
+import akka.actor.typed.internal.InternalRecipientRef
 import akka.actor.typed.internal.adapter.GuardianActorAdapter
 import akka.actor.typed.receptionist.Receptionist
 
@@ -31,7 +31,7 @@ import akka.actor.typed.receptionist.Receptionist
  */
 @DoNotInherit
 @ApiMayChange
-abstract class ActorSystem[-T] extends ActorRef[T] with Extensions { this: InternalMessageChannel[T] ⇒
+abstract class ActorSystem[-T] extends ActorRef[T] with Extensions { this: InternalRecipientRef[T] ⇒
   /**
    * The name of this actor system, used to distinguish multiple ones within
    * the same JVM & class loader.

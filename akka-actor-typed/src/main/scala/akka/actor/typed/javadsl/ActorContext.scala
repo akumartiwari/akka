@@ -274,7 +274,7 @@ trait ActorContext[T] extends akka.actor.typed.ActorContext[T] {
    */
   def ask[Req, Res](
     resClass:        Class[Res],
-    target:          MessageChannel[Req],
+    target:          RecipientRef[Req],
     responseTimeout: Timeout,
     createRequest:   java.util.function.Function[ActorRef[Res], Req],
     applyToResponse: BiFunction[Res, Throwable, T]): Unit

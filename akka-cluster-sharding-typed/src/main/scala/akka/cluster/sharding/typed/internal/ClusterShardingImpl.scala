@@ -18,7 +18,7 @@ import akka.actor.typed.ActorRef
 import akka.actor.typed.ActorSystem
 import akka.actor.typed.Behavior
 import akka.actor.typed.Props
-import akka.actor.typed.internal.InternalMessageChannel
+import akka.actor.typed.internal.InternalRecipientRef
 import akka.actor.typed.internal.adapter.ActorRefAdapter
 import akka.actor.typed.internal.adapter.ActorSystemAdapter
 import akka.annotation.InternalApi
@@ -212,7 +212,7 @@ import akka.japi.function.{ Function ⇒ JFunction }
  */
 @InternalApi private[akka] final class EntityRefImpl[A](shardRegion: akka.actor.ActorRef, entityId: String,
                                                         scheduler: Scheduler)
-  extends javadsl.EntityRef[A] with scaladsl.EntityRef[A] with InternalMessageChannel[A] {
+  extends javadsl.EntityRef[A] with scaladsl.EntityRef[A] with InternalRecipientRef[A] {
 
   override def tell(msg: A): Unit =
     shardRegion ! ShardingEnvelope(entityId, msg)
@@ -257,16 +257,16 @@ import akka.japi.function.{ Function ⇒ JFunction }
     val promiseRef: PromiseActorRef = _promiseRef
   }
 
-  // impl InternalMessageChannel
+  // impl InternalRecipientRef
   override def provider: ActorRefProvider = {
     import akka.actor.typed.scaladsl.adapter._
-    shardRegion.toTyped.asInstanceOf[InternalMessageChannel[_]].provider
+    shardRegion.toTyped.asInstanceOf[InternalRecipientRef[_]].provider
   }
 
-  // impl InternalMessageChannel
+  // impl InternalRecipientRef
   def isTerminated: Boolean = {
     import akka.actor.typed.scaladsl.adapter._
-    shardRegion.toTyped.asInstanceOf[InternalMessageChannel[_]].isTerminated
+    shardRegion.toTyped.asInstanceOf[InternalRecipientRef[_]].isTerminated
   }
 
 }

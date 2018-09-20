@@ -16,13 +16,13 @@ import scala.compat.java8.FutureConverters
 import scala.concurrent._
 
 import akka.actor.ActorRefProvider
-import akka.actor.typed.internal.InternalMessageChannel
+import akka.actor.typed.internal.InternalRecipientRef
 
 /**
  * INTERNAL API
  */
 @InternalApi private[akka] final class ActorSystemStub(val name: String)
-  extends ActorSystem[Nothing] with ActorRef[Nothing] with ActorRefImpl[Nothing] with InternalMessageChannel[Nothing] {
+  extends ActorSystem[Nothing] with ActorRef[Nothing] with ActorRefImpl[Nothing] with InternalRecipientRef[Nothing] {
 
   override val path: a.ActorPath = a.RootActorPath(a.Address("akka", name)) / "user"
 
@@ -36,9 +36,9 @@ import akka.actor.typed.internal.InternalMessageChannel
   override def sendSystem(signal: akka.actor.typed.internal.SystemMessage): Unit =
     throw new UnsupportedOperationException("must not send SYSTEM message to ActorSystemStub")
 
-  // impl InternalMessageChannel, ask not supported
+  // impl InternalRecipientRef, ask not supported
   override def provider: ActorRefProvider = throw new UnsupportedOperationException("no provider")
-  // impl InternalMessageChannel
+  // impl InternalRecipientRef
   def isTerminated: Boolean = whenTerminated.isCompleted
 
   val deadLettersInbox = new DebugRef[Any](path.parent / "deadLetters", true)

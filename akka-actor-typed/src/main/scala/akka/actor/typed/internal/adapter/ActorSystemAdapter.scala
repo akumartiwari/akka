@@ -30,7 +30,7 @@ import akka.actor.ActorRefProvider
  * most circumstances.
  */
 @InternalApi private[akka] class ActorSystemAdapter[-T](val untyped: a.ActorSystemImpl)
-  extends ActorSystem[T] with ActorRef[T] with internal.ActorRefImpl[T] with internal.InternalMessageChannel[T] with ExtensionsImpl {
+  extends ActorSystem[T] with ActorRef[T] with internal.ActorRefImpl[T] with internal.InternalRecipientRef[T] with ExtensionsImpl {
 
   untyped.assertInitialized()
 
@@ -47,9 +47,9 @@ import akka.actor.ActorRefProvider
   // impl ActorRefImpl
   override def sendSystem(signal: internal.SystemMessage): Unit = sendSystemMessage(untyped.guardian, signal)
 
-  // impl InternalMessageChannel
+  // impl InternalRecipientRef
   override def provider: ActorRefProvider = untyped.provider
-  // impl InternalMessageChannel
+  // impl InternalRecipientRef
   def isTerminated: Boolean = whenTerminated.isCompleted
 
   final override val path: a.ActorPath = a.RootActorPath(a.Address("akka", untyped.name)) / "user"

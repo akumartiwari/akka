@@ -16,7 +16,7 @@ import akka.dispatch.sysmsg
  * INTERNAL API
  */
 @InternalApi private[typed] class ActorRefAdapter[-T](val untyped: a.InternalActorRef)
-  extends ActorRef[T] with internal.ActorRefImpl[T] with internal.InternalMessageChannel[T] {
+  extends ActorRef[T] with internal.ActorRefImpl[T] with internal.InternalRecipientRef[T] {
 
   override def path: a.ActorPath = untyped.path
 
@@ -31,9 +31,9 @@ import akka.dispatch.sysmsg
   override def sendSystem(signal: internal.SystemMessage): Unit =
     ActorRefAdapter.sendSystemMessage(untyped, signal)
 
-  // impl InternalMessageChannel
+  // impl InternalRecipientRef
   override def provider: ActorRefProvider = untyped.provider
-  // impl InternalMessageChannel
+  // impl InternalRecipientRef
   def isTerminated: Boolean = untyped.isTerminated
 
   @throws(classOf[java.io.ObjectStreamException])

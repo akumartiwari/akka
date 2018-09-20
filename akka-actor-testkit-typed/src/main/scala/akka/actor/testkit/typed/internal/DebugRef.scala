@@ -13,13 +13,13 @@ import akka.{ actor ⇒ a }
 import scala.annotation.tailrec
 
 import akka.actor.ActorRefProvider
-import akka.actor.typed.internal.InternalMessageChannel
+import akka.actor.typed.internal.InternalRecipientRef
 
 /**
  * INTERNAL API
  */
 @InternalApi private[akka] final class DebugRef[T](override val path: a.ActorPath, override val isLocal: Boolean)
-  extends ActorRef[T] with ActorRefImpl[T] with InternalMessageChannel[T] {
+  extends ActorRef[T] with ActorRefImpl[T] with InternalRecipientRef[T] {
 
   private val q = new ConcurrentLinkedQueue[Either[SystemMessage, T]]
 
@@ -61,8 +61,8 @@ import akka.actor.typed.internal.InternalMessageChannel
     rec(Nil)
   }
 
-  // impl InternalMessageChannel, ask not supported
+  // impl InternalRecipientRef, ask not supported
   override def provider: ActorRefProvider = throw new UnsupportedOperationException("no provider")
-  // impl InternalMessageChannel
+  // impl InternalRecipientRef
   def isTerminated: Boolean = false
 }

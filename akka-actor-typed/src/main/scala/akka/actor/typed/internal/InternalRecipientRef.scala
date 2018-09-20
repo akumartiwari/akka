@@ -5,13 +5,13 @@
 package akka.actor.typed.internal
 
 import akka.actor.ActorRefProvider
-import akka.actor.typed.MessageChannel
+import akka.actor.typed.RecipientRef
 import akka.annotation.InternalApi
 
 /**
  * INTERNAL API
  */
-@InternalApi private[akka] trait InternalMessageChannel[-T] extends MessageChannel[T] {
+@InternalApi private[akka] trait InternalRecipientRef[-T] extends RecipientRef[T] {
 
   /**
    * Get a reference to the actor ref provider which created this ref.

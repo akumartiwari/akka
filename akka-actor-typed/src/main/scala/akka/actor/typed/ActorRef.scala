@@ -10,7 +10,7 @@ import scala.annotation.unchecked.uncheckedVariance
 import scala.concurrent.Future
 import scala.util.Success
 
-import akka.actor.typed.internal.InternalMessageChannel
+import akka.actor.typed.internal.InternalRecipientRef
 
 /**
  * An ActorRef is the identity or address of an Actor instance. It is valid
@@ -21,7 +21,7 @@ import akka.actor.typed.internal.InternalMessageChannel
  * [[akka.event.EventStream]] on a best effort basis
  * (i.e. this delivery is not reliable).
  */
-trait ActorRef[-T] extends MessageChannel[T] with java.lang.Comparable[ActorRef[_]] with java.io.Serializable { this: InternalMessageChannel[T] ⇒
+trait ActorRef[-T] extends RecipientRef[T] with java.lang.Comparable[ActorRef[_]] with java.io.Serializable { this: InternalRecipientRef[T] ⇒
   /**
    * Send a message to the Actor referenced by this ActorRef using *at-most-once*
    * messaging semantics.
@@ -109,19 +109,19 @@ private[akka] final case class SerializedActorRef[T] private (address: String) {
  * - not serializable
  * - not watchable
  */
-trait MessageChannel[-T] { this: InternalMessageChannel[T] ⇒
+trait RecipientRef[-T] { this: InternalRecipientRef[T] ⇒
   /**
-   * Send a message to the destination referenced by this `MessageChannel` using *at-most-once*
+   * Send a message to the destination referenced by this `RecipientRef` using *at-most-once*
    * messaging semantics.
    */
   def tell(msg: T): Unit
 }
 
-object MessageChannel {
+object RecipientRef {
 
-  implicit final class MessageChannelOps[-T](val ref: MessageChannel[T]) extends AnyVal {
+  implicit final class RecipientRefOps[-T](val ref: RecipientRef[T]) extends AnyVal {
     /**
-     * Send a message to the destination referenced by this `MessageChannel` using *at-most-once*
+     * Send a message to the destination referenced by this `RecipientRef` using *at-most-once*
      * messaging semantics.
      */
     def !(msg: T): Unit = ref.tell(msg)

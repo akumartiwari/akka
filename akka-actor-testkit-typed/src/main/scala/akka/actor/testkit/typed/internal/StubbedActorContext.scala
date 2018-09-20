@@ -33,7 +33,7 @@ import akka.actor.ActorRefProvider
 private[akka] final class FunctionRef[-T](
   override val path: ActorPath,
   send:              (T, FunctionRef[T]) ⇒ Unit)
-  extends ActorRef[T] with ActorRefImpl[T] with InternalMessageChannel[T] {
+  extends ActorRef[T] with ActorRefImpl[T] with InternalRecipientRef[T] {
 
   override def tell(msg: T): Unit = {
     if (msg == null) throw InvalidMessageException("[null] is not an allowed message")
@@ -45,9 +45,9 @@ private[akka] final class FunctionRef[-T](
   // impl ActorRefImpl
   override def isLocal = true
 
-  // impl InternalMessageChannel, ask not supported
+  // impl InternalRecipientRef, ask not supported
   override def provider: ActorRefProvider = throw new UnsupportedOperationException("no provider")
-  // impl InternalMessageChannel
+  // impl InternalRecipientRef
   def isTerminated: Boolean = false
 }
 
